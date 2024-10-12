@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CraftBeer.Web", "CraftBeer.Web\CraftBeer.Web.csproj", "{B372D5D0-87AD-4174-828F-8F4B1EB51F3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CraftBeer.OrderService", "CraftBeer.OrderService\CraftBeer.OrderService.csproj", "{31F74ADC-0843-4D68-9204-A3F105781D21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,14 @@ Global
 		{B372D5D0-87AD-4174-828F-8F4B1EB51F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B372D5D0-87AD-4174-828F-8F4B1EB51F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B372D5D0-87AD-4174-828F-8F4B1EB51F3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31F74ADC-0843-4D68-9204-A3F105781D21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31F74ADC-0843-4D68-9204-A3F105781D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31F74ADC-0843-4D68-9204-A3F105781D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31F74ADC-0843-4D68-9204-A3F105781D21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Debug|Any CPU.ActiveCfg = Debug
+		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Debug|Any CPU.Build.0 = Debug
+		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Release|Any CPU.ActiveCfg = Release
+		{D1786E2B-CAA0-4B2D-A974-9845EB9E420F}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

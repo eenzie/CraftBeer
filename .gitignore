@@ -398,3 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 /CraftBeer/CraftBeer.Web/appsettings.Development.json
 /CraftBeer/CraftBeer.Web/appsettings.json
+/CraftBeer/CraftBeer.OrderService/appsettings.Development.json
+/CraftBeer/CraftBeer.OrderService/appsettings.json

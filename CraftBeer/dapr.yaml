@@ -1,0 +1,14 @@
+apps:
+- appDirPath: CraftBeer.OrderService
+  appID: craftbeer-orderservice
+  appPort: 5174
+  command:
+  - dotnet
+  - run
+- appDirPath: CraftBeer.Web
+  appID: craftbeer-web
+  appPort: 5548
+  command:
+  - dotnet
+  - run
+version: 1

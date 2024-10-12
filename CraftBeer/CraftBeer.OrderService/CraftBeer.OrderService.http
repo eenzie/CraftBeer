@@ -1,0 +1,6 @@
+@CraftBeer.OrderService_HostAddress = http://localhost:5174
+
+GET {{CraftBeer.OrderService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
