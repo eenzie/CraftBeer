@@ -400,3 +400,14 @@ FodyWeavers.xsd
 /CraftBeer/CraftBeer.Web/appsettings.json
 /CraftBeer/CraftBeer.OrderService/appsettings.Development.json
 /CraftBeer/CraftBeer.OrderService/appsettings.json
+/CraftBeer/WarehouseService.Api/appsettings.json
+/CraftBeer/OrderService.Api/appsettings.json
+/CraftBeer/CraftBeer.AppHost/appsettings.json
+/CraftBeer/CraftBeer.AppHost/Properties/launchSettings.json
+/CraftBeer/CraftBeer.AppHost/appsettings.Development.json
+/CraftBeer/OrderService.Api/Properties/launchSettings.json
+/CraftBeer/OrderService.Api/appsettings.Development.json
+/CraftBeer/WarehouseService.Api/appsettings.Development.json
+/CraftBeer/WarehouseService.Api/Properties/launchSettings.json
+/CraftBeer/PaymentService.Api/appsettings.json
+/CraftBeer/PaymentService.Api/appsettings.Development.json
