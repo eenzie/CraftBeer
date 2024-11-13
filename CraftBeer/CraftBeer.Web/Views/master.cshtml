@@ -21,10 +21,7 @@
     @await Html.PartialAsync("myviews/Navigation")
 
     <div class="container-fluid p-5 bg-dark text-white">
-        <h1>@Model.Value("title")</h1>
-        <hr>
-        <p>@Model.Value("mainContent")</p>
-        <br>
+        
         <!-- Renders child content -->
         @RenderBody()
 

@@ -3,3 +3,9 @@
 @{
 	Layout = "master.cshtml";
 }
+
+<div class="p-2 bg-dark text-white rounded">
+    <h1>@Model.Value("title")</h1>
+	<hr>
+    <h4>@Model.Value("mainContent")</h4>
+</div>
