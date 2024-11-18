@@ -1,20 +1,23 @@
 ﻿using Dapr.Workflow;
 using OrderService.Domain.Entities;
+using Shared.DTOs;
 namespace OrderService.Application.Activities;
 
-//TODO: Set up Create order activity
-public class OrderCreationActivity : WorkflowActivity<Order, object?>
+public class OrderCreationActivity : WorkflowActivity<OrderDto, object?>
 {
-    //readonly IStateManagementRepository _stateManagement;
-
-    //public CreateOrderActivity(IStateManagementRepository stateManagement)
-    //{
-    //    _stateManagement = stateManagement;
-    //}
-
-    public override async Task<object?> RunAsync(WorkflowActivityContext context, Order order)
+    public override Task<object?> RunAsync(WorkflowActivityContext context, OrderDto input)
     {
-        //await _stateManagement.SaveOrderAsync(order);
+        var orderItems = input.OrderItemsDto.Select(OrderItem.FromDto).ToList();
+
+        var customer = Customer.FromDto(input.CustomerDto);
+
+        var orderStatus = (OrderStatus)input.StatusDto;
+
+        var order = Order.Create(input.OrderId,
+                                 orderItems,
+                                 input.OrderDate,
+                                 customer,
+                                 orderStatus);
 
         return null;
     }

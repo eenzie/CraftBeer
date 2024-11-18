@@ -3,5 +3,5 @@
 public record StockItemDto
 {
     public string StockType { get; init; } = String.Empty;
-    public int Quantity { get; init; }
+    public int Quantity { get; set; }
 }

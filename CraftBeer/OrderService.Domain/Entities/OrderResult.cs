@@ -1,3 +1,4 @@
-﻿namespace OrderService.Domain.Entities;
+﻿using Shared.DTOs;
+namespace OrderService.Domain.Entities;
 
-public record OrderResult(OrderStatus Status, Order Order, string? Message = null);
+public record OrderResult(OrderStatusDto StatusDto, OrderDto OrderDto, string? Message = null);

@@ -52,7 +52,7 @@ public class WarehouseController : ControllerBase
 
         foreach (var item in unreserveItemsRequest.Items)
         {
-            _logger.LogInformation($"Unreserving item: {item.ItemType}, Quantity: {item.Quantity}");
+            _logger.LogInformation($"Unreserving item: {item.StockType}, Quantity: {item.Quantity}");
             // TODO: Implement logic to undo the reservation here.
             // If reserve item removes qty from inventory, then here we add qty back in
         }

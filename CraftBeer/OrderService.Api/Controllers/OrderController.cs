@@ -1,7 +1,7 @@
 ﻿using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Application.Workflows;
-using OrderService.Domain.Entities;
+using Shared.DTOs;
 
 namespace OrderService.Api.Controllers;
 
@@ -19,7 +19,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> Post([FromBody] Order order)
+    public async Task<IActionResult> Post([FromBody] OrderDto order)
     {
         var instanceId = Guid.NewGuid().ToString();
         var workflowComponentName =
