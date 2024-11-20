@@ -2,5 +2,5 @@
 
 public record PaymentProcessEvent : IntegrationEventOutgoing
 {
-    public decimal Amount { get; init; }
+    public double Amount { get; init; }
 }

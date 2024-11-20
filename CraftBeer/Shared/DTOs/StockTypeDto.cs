@@ -1,12 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace Shared.DTOs;
 
-namespace Shared.DTOs;
-
-[JsonConverter(typeof(JsonStringEnumConverter))]
-public enum StockTypeDto
+public class StockTypeDto
 {
-    CraftBeer1 = 1,
-    CraftBeer2 = 2,
-    CraftBeer3 = 3,
-    CraftBeer4 = 4
+    public string Name { get; set; }
+    public double Price { get; set; }
 }

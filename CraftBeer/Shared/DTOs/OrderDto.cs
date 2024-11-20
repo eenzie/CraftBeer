@@ -1,13 +1,12 @@
-﻿namespace Shared.DTOs;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.DTOs;
 
 public record OrderDto(
-    string OrderId,
-    OrderItemDto[] OrderItems,
-    DateTime OrderDate,
-    CustomerDto CustomerDto,
-    OrderStatusDto Status = OrderStatusDto.OrderReceived)
-{
-
-    //TODO: Change the GUID formatting
-    public string ShortId => OrderId.Substring(0, 8);
-}
+    [property: JsonPropertyName("OrderId")] string OrderId,
+    [property: JsonPropertyName("OrderItemsDto")] List<OrderItemDto> OrderItemsDto,
+    [property: JsonPropertyName("OrderDate")] DateTime OrderDate,
+    [property: JsonPropertyName("CustomerDto")] CustomerDto CustomerDto,
+    [property: JsonPropertyName("Total")] double Total,
+    [property: JsonPropertyName("StatusDto")] OrderStatusDto StatusDto
+);

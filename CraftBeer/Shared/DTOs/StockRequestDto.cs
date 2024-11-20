@@ -1,3 +1,3 @@
 ﻿namespace Shared.DTOs;
 
-public record StockRequestDto(OrderItemDto[] ItemsRequested);
+public record StockRequestDto(List<OrderItemDto> ItemsRequested);

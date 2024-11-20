@@ -1,21 +1,42 @@
 ﻿using Dapr.Workflow;
 using OrderService.Domain.Entities;
+using Shared.DTOs;
 namespace OrderService.Application.Activities;
 
-//TODO: Set up Create order activity
-public class OrderCreationActivity : WorkflowActivity<Order, object?>
+public class OrderCreationActivity : WorkflowActivity<OrderDto, object?>
 {
-    //readonly IStateManagementRepository _stateManagement;
-
-    //public CreateOrderActivity(IStateManagementRepository stateManagement)
-    //{
-    //    _stateManagement = stateManagement;
-    //}
-
-    public override async Task<object?> RunAsync(WorkflowActivityContext context, Order order)
+    public override Task<object?> RunAsync(WorkflowActivityContext context, OrderDto input)
     {
-        //await _stateManagement.SaveOrderAsync(order);
+        var orderItems = new List<OrderItem>();
 
-        return null;
+        foreach (var itemDto in input.OrderItemsDto)
+        {
+            var orderItem = OrderItem.FromDto(itemDto);
+            orderItems.Add(orderItem);
+        }
+        var customer = Customer.FromDto(input.CustomerDto);
+
+        var orderStatus = (OrderStatus)(int)input.StatusDto;
+        try
+        {
+            var order = Order.Create(input.OrderId,
+                             orderItems,
+                             input.OrderDate,
+                             customer,
+                             orderStatus);
+
+            return Task.FromResult<object?>(null);  // Understreger at null er en bevidst return type
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception in Order.Create:");
+            Console.WriteLine($"Message: {ex.Message}");
+            Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+            throw; // Allows workflow retry
+        }
+
+        //return null;  //Virker ikke!
+        //Smider en "object not set to an instance of an object" exception.
+        //Ikke kompatibel med async Task
     }
 }
