@@ -4,13 +4,13 @@ namespace OrderService.Application.Helpers.Commands.DTOs
 {
     public class CreateOrderDto
     {
-        public string Id { get; init; }
+        public string Id { get; set; }
         public double Amount { get; set; }
-        public string OrderId { get; }
-        public List<OrderItem> OrderItems { get; }
-        public DateTime OrderDate { get; }
-        public Customer Customer { get; }
-        public double Total { get; }
-        public OrderStatus Status { get; }
+        public string OrderId { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
+        public DateTime OrderDate { get; set; }
+        public Customer Customer { get; set; }
+        public double Total { get; set; }
+        public OrderStatus Status { get; set; }
     }
 }

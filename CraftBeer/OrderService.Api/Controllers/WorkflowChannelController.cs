@@ -30,23 +30,24 @@ public class WorkflowChannelController : ControllerBase
 
         try
         {
-            await _daprClient.RaiseWorkflowEventAsync(
-            reservationResult.CorrelationId,
-            _workflowComponentName,
-            ExternalEvents.ReservationEvent,
-            reservationResult);
+#pragma warning disable CS0618 // Type or member is obsolete
+            await _daprClient.RaiseWorkflowEventAsync(reservationResult.CorrelationId,
+                                                      _workflowComponentName,
+                                                      ExternalEvents.ReservationEvent,
+                                                      reservationResult);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             _logger.LogInformation("Reservation response sent to workflow");
         }
         catch (Dapr.DaprException daprEx)
         {
             _logger.LogError(daprEx,
-                $"################### Failed to raise event {ExternalEvents.ReservationEvent} for workflow {reservationResult.CorrelationId}: {daprEx.InnerException?.Message}");
+                $"Failed to raise event {ExternalEvents.ReservationEvent} for workflow {reservationResult.CorrelationId}: {daprEx.InnerException?.Message}");
             return StatusCode(500, "Failed to raise event for workflow instance.");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "################### Unexpected error in ReservationResult.");
+            _logger.LogError(ex, "Unexpected error in ReservationResult.");
             return StatusCode(500, "An unexpected error occurred.");
         }
         return Ok();
@@ -61,11 +62,12 @@ public class WorkflowChannelController : ControllerBase
 
         try
         {
-            await _daprClient.RaiseWorkflowEventAsync(
-            paymentResult.CorrelationId,
-            _workflowComponentName,
-            ExternalEvents.PaymentEvent,
-            paymentResult);
+#pragma warning disable CS0618 // Type or member is obsolete
+            await _daprClient.RaiseWorkflowEventAsync(paymentResult.CorrelationId,
+                                                      _workflowComponentName,
+                                                      ExternalEvents.PaymentEvent,
+                                                      paymentResult);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             _logger.LogInformation("Payment response send to workflow successfully");
 
@@ -73,12 +75,12 @@ public class WorkflowChannelController : ControllerBase
         catch (Dapr.DaprException daprEx)
         {
             _logger.LogError(daprEx,
-                $"################### Failed to raise event {ExternalEvents.PaymentEvent} for workflow {paymentResult.CorrelationId}: {daprEx.InnerException?.Message}");
+                $"Failed to raise event {ExternalEvents.PaymentEvent} for workflow {paymentResult.CorrelationId}: {daprEx.InnerException?.Message}");
             return StatusCode(500, "Failed to raise event for workflow instance.");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "################### Unexpected error in PaymentResult.");
+            _logger.LogError(ex, "Unexpected error in PaymentResult.");
             return StatusCode(500, "An unexpected error occurred.");
         }
         return Ok();

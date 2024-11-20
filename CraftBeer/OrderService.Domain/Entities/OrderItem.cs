@@ -33,14 +33,12 @@ public class OrderItem
 
     public static OrderItem FromDto(OrderItemDto dto)
     {
-        // Find the matching StockType based on the Name
-        var stockType = StockType.AllStockTypes.FirstOrDefault(type => type.Name == dto.StockType);
+        // Using the static FromName method to get the matching StockType by Name
+        var stockType = StockType.FromName(dto.StockType);
 
         if (stockType == null)
         {
             throw new ArgumentException($"Invalid StockType: {dto.StockType}");
-
-            //NOTE: NAME MUST BE CORRECTLY ENTERED
         }
 
         return new OrderItem(

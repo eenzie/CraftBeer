@@ -13,25 +13,30 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
     {
         #region Create order
 
-        orderDto.OrderId = context.InstanceId;
-        orderDto.StatusDto = OrderStatusDto.OrderReceived;
+        var newOrder = orderDto with { StatusDto = OrderStatusDto.OrderReceived, OrderId = context.InstanceId };
 
-        await context.CallActivityAsync(
-            nameof(OrderCreationActivity),
-            orderDto);
-
+        try
+        {
+            await context.CallActivityAsync(
+                            nameof(OrderCreationActivity),
+                            newOrder);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
 
         await context.CallActivityAsync(
             nameof(NotificationActivity),
-            new Notification
-                ($"Received order {orderDto.OrderId} from {orderDto.CustomerDto.Name}.",
-                orderDto));
+            new Notification($"Received order {newOrder.OrderId} from {newOrder.CustomerDto.Name}.", newOrder));
+
+        //TODO: Add logic for Success/Failed int.events
 
         #endregion
 
         #region Reserve Item(s)
 
-        orderDto.StatusDto = OrderStatusDto.OrderReceived;
+        newOrder = newOrder with { StatusDto = OrderStatusDto.CheckingStock };
 
         var itemsToReserve = new StockRequestDto(
             orderDto.OrderItemsDto
@@ -59,13 +64,14 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
 
         if (reservationResult.Status == ResultStatus.Failed)
         {
-            orderDto.StatusDto = OrderStatusDto.InsufficientStock;
+            newOrder = newOrder with { StatusDto = OrderStatusDto.InsufficientStock };
+            //orderDto.StatusDto = OrderStatusDto.InsufficientStock;
 
             await context.CallActivityAsync(
                 nameof(NotificationActivity),
                 new Notification(
-                    $"Failed: Order {orderDto.OrderId} from {orderDto.CustomerDto.Name}. Reservation failed.",
-                    orderDto));
+                    $"Failed: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}. Reservation failed.",
+                    newOrder));
 
             return new OrderResult(
                 orderDto.StatusDto,
@@ -73,19 +79,21 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
                 "Reservation failed.");
         }
 
-        orderDto.StatusDto = OrderStatusDto.SufficientStock;
+        newOrder = newOrder with { StatusDto = OrderStatusDto.SufficientStock };
+        //orderDto.StatusDto = OrderStatusDto.SufficientStock;
 
         await context.CallActivityAsync(
             nameof(NotificationActivity),
             new Notification(
-                $"Reservation Completed: Order {orderDto.OrderId} from {orderDto.CustomerDto.Name}.",
-                orderDto));
+                $"Reservation Completed: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}.",
+                newOrder));
 
         #endregion
 
         #region Process Payment
 
-        orderDto.StatusDto = OrderStatusDto.CheckingPayment;
+        newOrder = newOrder with { StatusDto = OrderStatusDto.CheckingPayment };
+        //orderDto.StatusDto = OrderStatusDto.CheckingPayment;
 
         var paymentDto = new PaymentDto(orderDto.Total);
 
@@ -96,8 +104,8 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
         await context.CallActivityAsync(
             nameof(NotificationActivity),
             new Notification(
-                $"Wating for Payment: Order {orderDto.OrderId} from {orderDto.CustomerDto.Name}.",
-                orderDto));
+                $"Wating for Payment: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}.",
+                newOrder));
 
         var paymentResult = await context.WaitForExternalEventAsync<PaymentResultEvent>(
             ExternalEvents.PaymentEvent,
@@ -105,12 +113,13 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
 
         if (paymentResult.Status == ResultStatus.Failed)
         {
-            orderDto.StatusDto = OrderStatusDto.PaymentFailed;
+            newOrder = newOrder with { StatusDto = OrderStatusDto.PaymentFailed };
+            //orderDto.StatusDto = OrderStatusDto.PaymentFailed;
             await context.CallActivityAsync(
                 nameof(NotificationActivity),
                 new Notification(
-                    $"Failed: Order {orderDto.OrderId} from {orderDto.CustomerDto.Name}. Payment failed.",
-                    orderDto));
+                    $"Failed: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}. Payment failed.",
+                    newOrder));
 
             // TODO: Compensating transaction - Unreserve the items
             //await context.CallActivityAsync(
@@ -126,20 +135,21 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
             return new OrderResult(orderDto.StatusDto, orderDto, "Payment failed.");
         }
 
-        orderDto.StatusDto = OrderStatusDto.PaymentSuccess;
+        newOrder = newOrder with { StatusDto = OrderStatusDto.PaymentSuccess };
+        //orderDto.StatusDto = OrderStatusDto.PaymentSuccess;
         await context.CallActivityAsync(
             nameof(NotificationActivity),
             new Notification(
-                $"Payment Completed: Order {orderDto.OrderId} from {orderDto.CustomerDto.Name}.",
-                orderDto));
+                $"Payment Completed: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}.",
+                newOrder));
 
         #endregion
 
         await context.CallActivityAsync(
             nameof(NotificationActivity),
             new Notification(
-                $"Completed: Order {orderDto.OrderId}  from  {orderDto.CustomerDto.Name}.",
-                orderDto));
+                $"Completed: Order {newOrder.OrderId}  from  {newOrder.CustomerDto.Name}.",
+                newOrder));
 
         return new OrderResult(orderDto.StatusDto, orderDto);
     }
