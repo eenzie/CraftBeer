@@ -80,7 +80,6 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
         }
 
         newOrder = newOrder with { StatusDto = OrderStatusDto.SufficientStock };
-        //orderDto.StatusDto = OrderStatusDto.SufficientStock;
 
         await context.CallActivityAsync(
             nameof(NotificationActivity),
@@ -93,7 +92,6 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
         #region Process Payment
 
         newOrder = newOrder with { StatusDto = OrderStatusDto.CheckingPayment };
-        //orderDto.StatusDto = OrderStatusDto.CheckingPayment;
 
         var paymentDto = new PaymentDto(orderDto.Total);
 
