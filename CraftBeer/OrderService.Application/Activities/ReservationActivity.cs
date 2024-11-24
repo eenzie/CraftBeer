@@ -20,7 +20,10 @@ public class ReservationActivity : WorkflowActivity<OrderItemDto, object?>
 
     public override async Task<object?> RunAsync(WorkflowActivityContext context, OrderItemDto input)
     {
+        //TODO: Refine the message output, as currently empty
         _logger.LogInformation($"About to publish: {input}");
+
+        //TODO: Add reservation logic
 
         var reservationRequestMessage = new ReservationEvent { CorrelationId = context.InstanceId };
 
@@ -28,6 +31,7 @@ public class ReservationActivity : WorkflowActivity<OrderItemDto, object?>
                                             WarehouseChannel.Topics.Reservation,
                                             reservationRequestMessage);
 
+        //TODO: Change to: return Task.FromResult<object?>(null); ?
         return null;
     }
 }
