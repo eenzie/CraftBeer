@@ -1,0 +1,16 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "master.cshtml";
+    // Casts dateCreated to DateTime
+    var date = Model.Value<DateTime>("dateCreated");
+}
+
+<div class="p-2 bg-dark text-white rounded">
+    <h2>@Model.Value("title")</h2>
+	<hr>
+    <h6>@Model.Value("mainContent")</h6>
+    <hr>
+    <!-- Formats DateTime -->
+    <p><i> @date.ToString("dddd dd MMMM yyyy") </i> by @Model.Value("author")</p>
+</div>
