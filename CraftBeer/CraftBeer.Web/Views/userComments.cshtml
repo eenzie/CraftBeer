@@ -1,0 +1,37 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "master.cshtml";
+}
+
+@{
+	var selection = Umbraco.Content(Guid.Parse("99bc0caf-d6d6-4ce6-acfb-021550da1b50"))
+    .ChildrenOfType("comment")
+    .Where(x => x.IsVisible())
+    .OrderBy(x => x.CreateDate);
+}
+
+<div class="p-2 bg-dark text-white rounded">
+	<h1>@Model.Value("title")</h1>
+	<hr>
+	<br>
+	<div class="row">
+        <div class="col-md-4">
+            <ul class="list-group bs-dark">
+				<h3> Lastest comments </h3>
+				@foreach (var item in selection)
+				{
+					<div class="p-3 text-primary-emphasis bg-success-subtle border border-secondary rounded-2">
+						<ul class="list-group-item pl-5">
+							<h5> @item.Value("subject") </h5>
+							<p>
+								<b> @item.Value("userName") writes: </b>
+								<i> @item.Value("message") </i>
+							</p>
+						</ul>
+					</div>
+				}
+			</ul>
+		</div>
+    </div>
+</div>

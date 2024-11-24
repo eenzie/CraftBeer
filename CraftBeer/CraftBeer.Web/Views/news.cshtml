@@ -2,4 +2,50 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
 	Layout = "master.cshtml";
+
+    
 }
+
+
+
+<!-- Article items -->
+@{
+	var selection = Umbraco.Content(Guid.Parse("8c9a6adb-8e8b-4b65-a6ea-eb8e912a7a8a"))
+    .ChildrenOfType("article")
+    .Where(x => x.IsVisible())
+    .OrderBy(x => x.CreateDate);
+}
+
+<div class="p-2 bg-dark text-white rounded">
+    <h1>@Model.Value("title")</h1>
+	<hr>
+    <h4>@Model.Value("mainContent")</h4>
+    <hr>
+    <h6> Total articles: @selection.Count() </h6>
+    
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <ul class="list-group">
+                <h3>Lastest articles</h3>
+                <ul>
+                    @foreach (var item in selection)
+                    {
+                        <!-- Casts dateCreate to DateTime date -->
+                        var date = item.Value<DateTime>("dateCreated");
+
+                        <div class="p-3 text-primary-emphasis bg-success-subtle border border-secondary rounded-2">
+                            <li class="list-group-item pl-5">
+                                <a href="@item.Url()"> @item.Value("title") </a>
+                                <!-- Formats date -->
+                                <p><i> @date.ToString("dddd dd MMMM yyyy") </i></p>
+                            </li>
+                        </div>
+                        <br>
+                    }
+                </ul>
+            </ul>
+        </div>
+    </div>
+</div>

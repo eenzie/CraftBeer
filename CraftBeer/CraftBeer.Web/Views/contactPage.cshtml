@@ -1,0 +1,10 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using CraftBeer.Web.ViewModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "master.cshtml";
+}
+
+@{
+	Html.RenderPartial("~/Views/Partials/myviews/ContactForm.cshtml", new ContactForm());
+}
