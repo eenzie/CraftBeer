@@ -21,6 +21,8 @@ public class WorkflowChannelController : ControllerBase
         _logger = logger;
     }
 
+    //TODO: Workflow channel: Order creation result??
+
     [Topic(WorkflowChannel.Channel, WorkflowChannel.Topics.ReservationResult)]
     [HttpPost("reservationresult")]
     public async Task<IActionResult> ReservationResult([FromBody] ReservationResultEvent reservationResult)
@@ -50,6 +52,7 @@ public class WorkflowChannelController : ControllerBase
             _logger.LogError(ex, "Unexpected error in ReservationResult.");
             return StatusCode(500, "An unexpected error occurred.");
         }
+
         return Ok();
     }
 
@@ -83,6 +86,40 @@ public class WorkflowChannelController : ControllerBase
             _logger.LogError(ex, "Unexpected error in PaymentResult.");
             return StatusCode(500, "An unexpected error occurred.");
         }
+
+        return Ok();
+    }
+
+    [Topic(WorkflowChannel.Channel, WorkflowChannel.Topics.ShippingResult)]
+    [HttpPost("shippingresult")]
+    public async Task<IActionResult> ShippingResult([FromBody] ShippingResultEvent itemsShippedResult)
+    {
+        _logger.LogInformation(
+            $"Shipping response received: Id: {itemsShippedResult.CorrelationId}, State: {itemsShippedResult.Status}");
+
+        try
+        {
+#pragma warning disable CS0618 // Type or member is obsolete
+            await _daprClient.RaiseWorkflowEventAsync(itemsShippedResult.CorrelationId,
+                                                  _workflowComponentName,
+                                                  ExternalEvents.ShippingEvent,
+                                                  itemsShippedResult);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            _logger.LogInformation("Shipping response send to workflow");
+        }
+        catch (Dapr.DaprException daprEx)
+        {
+            _logger.LogError(daprEx,
+                $"Failed to raise event {ExternalEvents.ShippingEvent} for workflow {itemsShippedResult.CorrelationId}: {daprEx.InnerException?.Message}");
+            return StatusCode(500, "Failed to raise event for workflow instance.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unexpected error in PaymentResult.");
+            return StatusCode(500, "An unexpected error occurred.");
+        }
+
         return Ok();
     }
 }

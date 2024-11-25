@@ -23,7 +23,7 @@ public class ReservationActivity : WorkflowActivity<OrderItemDto, object?>
         //TODO: Refine the message output, as currently empty
         _logger.LogInformation($"About to publish: {input}");
 
-        //TODO: Add reservation logic
+        //Call application reservation logic here
 
         var reservationRequestMessage = new ReservationEvent { CorrelationId = context.InstanceId };
 

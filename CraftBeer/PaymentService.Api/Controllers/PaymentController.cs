@@ -1,6 +1,7 @@
 ﻿using Dapr;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
+using Shared.FailedIntegrationEventsIncoming;
 using Shared.IntegrationEventsIncoming;
 using Shared.IntegrationEventsOutgoing;
 using Shared.Queues;
@@ -38,8 +39,21 @@ public class PaymentController : ControllerBase
         await _daprClient.PublishEventAsync(WorkflowChannel.Channel, WorkflowChannel.Topics.PaymentResult,
             paymentResponse);
 
-        _logger.LogInformation("Payment processed: {CorrelationId}, {Amount}, {State}", paymentResponse.CorrelationId,
+        _logger.LogInformation("Payment processed: {CorrelationId}, {Amount}, {Status}", paymentResponse.CorrelationId,
             paymentResponse.Amount, paymentResponse.Status);
+
+        return Ok();
+    }
+
+    [Topic(PaymentChannel.Channel, PaymentChannel.Topics.Refund)]
+    [HttpPost("payment/undo")]
+    public async Task<IActionResult> UndoPayment([FromBody] PaymentFailedEvent paymentRefundRequest)
+    {
+        _logger.LogInformation("Payment refund request received: {CorrelationId}, {Amount}", paymentRefundRequest.CorrelationId,
+            paymentRefundRequest.Amount);
+
+        _logger.LogInformation("Refund processed: {CorrelationId}, {Amount}, {Status}", paymentRefundRequest.CorrelationId,
+            paymentRefundRequest.Amount, paymentRefundRequest.Status);
 
         return Ok();
     }

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="CompensatingActivities\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Dapr.AspNetCore" Version="1.14.0" />
     <PackageReference Include="Dapr.Workflow" Version="1.14.0" />
     <PackageReference Include="System.Text.Json" Version="9.0.0" />
