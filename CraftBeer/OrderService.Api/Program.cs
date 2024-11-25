@@ -34,12 +34,11 @@ builder.Services.AddDaprWorkflow(options =>
     _logger.LogInformation("Registering workflows and activities...");
     options.RegisterWorkflow<OrderWorkflow>();
 
-    // TODO: Register Activities
     options.RegisterActivity<NotificationActivity>();
     options.RegisterActivity<OrderCreationActivity>();
     options.RegisterActivity<ReservationActivity>();
     options.RegisterActivity<PaymentActivity>();
-    //options.RegisterActivity<ShippingActivity>();
+    options.RegisterActivity<ShippingActivity>();
 
     _logger.LogInformation("All workflows and activities registered successfully.");
 });

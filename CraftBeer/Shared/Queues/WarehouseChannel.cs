@@ -8,5 +8,6 @@ public class WarehouseChannel
         public const string Reservation = "reservation";
         public const string ReservationFailed = "reservationFailed";
         public const string Shipment = "shipment";
+        public const string ShipmentFailed = "shipmentFailed";
     }
 }

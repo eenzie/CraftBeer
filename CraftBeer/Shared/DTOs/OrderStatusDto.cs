@@ -12,8 +12,8 @@ namespace Shared.DTOs
         CheckingPayment = 4,
         PaymentSuccess = 5,
         PaymentFailed = 6,
-        Shiping = 7,
-        ShipingFailed = 8,
+        Shipping = 7,
+        ShippingFailed = 8,
         Error = 9,
     }
 }

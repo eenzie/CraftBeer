@@ -2,4 +2,5 @@
 
 public record OrderFailedEvent : FailedEvent
 {
+    //TODO: Order Failed Event to be implemented
 }

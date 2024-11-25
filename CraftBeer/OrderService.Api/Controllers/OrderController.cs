@@ -18,7 +18,7 @@ public class OrderController : ControllerBase
         _daprClient = daprClient;
     }
 
-    [HttpPost("create")]
+    [HttpPost("Create")]
     public async Task<IActionResult> Post([FromBody] OrderDto order)
     {
         var instanceId = Guid.NewGuid().ToString();

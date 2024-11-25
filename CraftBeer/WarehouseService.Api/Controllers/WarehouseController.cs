@@ -27,7 +27,7 @@ public class WarehouseController : ControllerBase
     {
         _logger.LogInformation($"Inventory request received: {reserveItemsRequest.CorrelationId}");
 
-        //TODO: Add logic to reservice item in db. Maybe remove qty from total amount in stock?
+        //Call application logic to reservice item in db
 
         var itemsReservedResponse = new ReservationResultEvent
         {
@@ -39,7 +39,7 @@ public class WarehouseController : ControllerBase
             itemsReservedResponse);
 
         _logger.LogInformation(
-            $"Item reserved: {itemsReservedResponse.CorrelationId}, {itemsReservedResponse.Status}");
+            $"Item(s) reserved: {itemsReservedResponse.CorrelationId}, {itemsReservedResponse.Status}");
 
         return Ok();
     }
@@ -52,9 +52,8 @@ public class WarehouseController : ControllerBase
 
         foreach (var item in unreserveItemsRequest.Items)
         {
-            _logger.LogInformation($"Unreserving item: {item.StockType}, Quantity: {item.Quantity}");
-            // TODO: Implement logic to undo the reservation here.
-            // If reserve item removes qty from inventory, then here we add qty back in
+            _logger.LogInformation($"Unreserving item(s): {item.StockType}, Quantity: {item.Quantity}");
+            //Call application logic to undo the reservation here.
         }
 
         return Ok();
@@ -76,7 +75,7 @@ public class WarehouseController : ControllerBase
             itemsShippedResponse);
 
         _logger.LogInformation(
-            $"Payment processed: {itemsShippedResponse.CorrelationId}, , {itemsShippedResponse.Status}");
+            $"Payment processed: {itemsShippedResponse.CorrelationId}, {itemsShippedResponse.Status}");
 
         return Ok();
     }
