@@ -35,8 +35,8 @@ public class OrderCreationActivity : WorkflowActivity<OrderDto, object?>
             throw; // Allows workflow retry
         }
 
-        //return null;  //Virker ikke!
-        //Smider en "object not set to an instance of an object" exception.
-        //Ikke kompatibel med async Task
+        //return null;  //Virker ikke her, men fint i de andre activities.
+        // Smider en "object not set to an instance of an object" exception.
+        // Ikke kompatibel med async Task?
     }
 }
