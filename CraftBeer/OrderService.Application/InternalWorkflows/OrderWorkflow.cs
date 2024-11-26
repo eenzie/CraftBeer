@@ -24,7 +24,7 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
             nameof(NotificationActivity),
             new Notification($"Received order {newOrder.OrderId} from {newOrder.CustomerDto.Name}.", newOrder));
 
-        //TODO: Logic for Success/Failed int.events? What if order creation fails?
+        //Add logic for Success/Failed integration events if order creation fails. Requires a pub/sub on order service
 
         #endregion
 
@@ -32,15 +32,13 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
 
         newOrder = newOrder with { StatusDto = OrderStatusDto.CheckingStock };
 
-        var itemsToReserve = new StockRequestDto(
-            orderDto.OrderItemsDto
-            .Select(x => new OrderItemDto(
-                x.Id,
-                x.StockType,
-                x.Quantity,
-                x.Total))
-            .ToList()
-        );
+        var itemsToReserve = orderDto.OrderItemsDto
+                                        .Select(x => new OrderItemDto(
+                                            x.Id,
+                                            x.StockType,
+                                            x.Quantity,
+                                            x.Total))
+                                        .ToList();
 
         await context.CallActivityAsync(
             nameof(ReservationActivity),
@@ -95,7 +93,9 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
         await context.CallActivityAsync(
             nameof(NotificationActivity),
             new Notification(
-                $"Wating for Payment: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}.",
+                $"Wating for payment of {paymentDto.Amount.ToString("C")} " +
+                $"on order {newOrder.OrderId} f" +
+                $"rom {newOrder.CustomerDto.Name}",
                 newOrder));
 
         var paymentResult = await context.WaitForExternalEventAsync<PaymentResultEvent>(
@@ -109,7 +109,7 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
             await context.CallActivityAsync(
                 nameof(NotificationActivity),
                 new Notification(
-                    $"Failed: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}. Payment failed.",
+                    $"Payment of {newOrder.Total} failed for order {newOrder.OrderId} from {newOrder.CustomerDto.Name}",
                     newOrder));
 
             //Compensating transaction - Unreserve the items
@@ -120,11 +120,6 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
             //TODO: Compensating transaction - Cancel order
 
             );
-
-            // TODO: Compensating transaction via message queue?
-            //await _daprClient.PublishEventAsync(WorkflowChannel.Channel, WorkflowChannel.Topics.PaymentFailed,
-            //itemsReservedResponse);
-
 
             return new OrderResult(orderDto.StatusDto, orderDto, "Payment failed.");
         }
@@ -181,7 +176,7 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
 
         #endregion
 
-        //TODO: Complete order activity
+        //TODO: Complete order activity?
 
         await context.CallActivityAsync(
         nameof(NotificationActivity),

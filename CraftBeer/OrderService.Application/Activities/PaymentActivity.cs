@@ -20,7 +20,7 @@ public class PaymentActivity : WorkflowActivity<PaymentDto, object?>
 
     public override async Task<object?> RunAsync(WorkflowActivityContext context, PaymentDto input)
     {
-        _logger.LogInformation($"About to publish: {input}");
+        _logger.LogInformation($"About to publish payment of: {input.Amount.ToString("C")}");
 
         var paymentRequestMessage = new PaymentResultEvent { CorrelationId = context.InstanceId, Amount = 100 };
 
@@ -28,6 +28,6 @@ public class PaymentActivity : WorkflowActivity<PaymentDto, object?>
                                             PaymentChannel.Topics.Payment,
                                             paymentRequestMessage);
 
-        return null;
+        return null;  //Hvorfor virker det her, men ikke i OrderCreationActivity?
     }
 }
