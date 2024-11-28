@@ -24,7 +24,9 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
             nameof(NotificationActivity),
             new Notification($"Received order {newOrder.OrderId} from {newOrder.CustomerDto.Name}.", newOrder));
 
-        //Add logic for Success/Failed integration events if order creation fails. Requires a pub/sub on order service
+        //Add logic for Success/Failed integration events if order creation fails.
+        //Requires a pub/sub on order service and related activities / events
+        //Could perhaps run through the WorkflowChannel, but likely best to create an OrderChannel?
 
         #endregion
 
@@ -35,11 +37,10 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
         var itemsToReserve = orderDto.OrderItemsDto
                                         .Select(x => new OrderItemDto(
                                             x.Id,
-                                            x.StockType,
+                                            x.StockTypeDto,
                                             x.Quantity,
                                             x.Total))
                                         .ToList();
-
         await context.CallActivityAsync(
             nameof(ReservationActivity),
             itemsToReserve);
@@ -64,10 +65,12 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
                     $"Failed: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}. Reservation failed.",
                     newOrder));
 
-            return new OrderResult(
-                orderDto.StatusDto,
-                orderDto,
-                "Reservation failed.");
+            //Compensating transaction - Cancel order
+            await context.CallActivityAsync(
+                nameof(CancelOrderActivity),
+                orderDto);
+
+            return new OrderResult(orderDto.StatusDto, orderDto, "Reservation failed.");
         }
 
         newOrder = newOrder with { StatusDto = OrderStatusDto.SufficientStock };
@@ -115,11 +118,12 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
             //Compensating transaction - Unreserve the items
             await context.CallActivityAsync(
                 nameof(UnreserveItemsActivity),
-                itemsToReserve
+                itemsToReserve);
 
-            //TODO: Compensating transaction - Cancel order
-
-            );
+            //Compensating transaction - Cancel order
+            await context.CallActivityAsync(
+                nameof(CancelOrderActivity),
+                orderDto);
 
             return new OrderResult(orderDto.StatusDto, orderDto, "Payment failed.");
         }
@@ -160,28 +164,30 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
                     $"Failed: Order {newOrder.OrderId} to {newOrder.CustomerDto.Name}. Shipping failed.",
                     newOrder));
 
-            //TODO: Compensating transaction - Refund payment
+            //Compensating transaction - Refund payment
+            await context.CallActivityAsync(
+                nameof(RefundPaymentActivity),
+                paymentDto);
 
             //Compensating transaction - Unreserve the items
             await context.CallActivityAsync(
                 nameof(UnreserveItemsActivity),
-                itemsToReserve
+                itemsToReserve);
 
-            //TODO: Compensating transaction - Cancel order
-
-            );
+            //Compensating transaction - Cancel order
+            await context.CallActivityAsync(
+                nameof(CancelOrderActivity),
+                orderDto);
 
             return new OrderResult(orderDto.StatusDto, orderDto, "Shipping failed.");
         }
 
         #endregion
 
-        //TODO: Complete order activity?
-
         await context.CallActivityAsync(
         nameof(NotificationActivity),
         new Notification(
-            $"Completed: Order {newOrder.OrderId}  from  {newOrder.CustomerDto.Name}.",
+            $"Completed: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}. Paid ({newOrder.Total.ToString("C")} and shipped",
             newOrder));
 
         return new OrderResult(orderDto.StatusDto, orderDto);

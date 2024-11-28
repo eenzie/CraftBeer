@@ -52,7 +52,7 @@ public class WarehouseController : ControllerBase
 
         foreach (var item in unreserveItemsRequest.Items)
         {
-            _logger.LogInformation($"Unreserving item(s): {item.StockType}, Quantity: {item.Quantity}");
+            _logger.LogInformation($"Unreserving item(s): {item.StockTypeDto}, Quantity: {item.Quantity}");
             //Call application logic to undo the reservation here.
         }
 

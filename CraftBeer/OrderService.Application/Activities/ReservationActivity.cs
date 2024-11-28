@@ -24,7 +24,7 @@ public class ReservationActivity : WorkflowActivity<List<OrderItemDto>, object?>
         {
             _logger.LogInformation($"About to publish reservation of {input.Count} item(s): " +
                                     $"Id={item.Id}, " +
-                                    $"StockType={item.StockType}, " +
+                                    $"StockType={item.StockTypeDto}, " +
                                     $"Quantity={item.Quantity}, " +
                                     $"Total={item.Total}");
         }

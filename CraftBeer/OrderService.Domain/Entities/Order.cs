@@ -33,6 +33,12 @@ public class Order
         return order;
     }
 
+    public static void Delete(string orderId)
+    {
+        //TODO: Implement business logic
+        //Dependent om business: delete order/items or remove data via update order/items
+    }
+
     private static double CalculateTotal(List<OrderItem> items)
     {
         var itemTotal = items.Sum(x => x.SubTotal);

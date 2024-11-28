@@ -2,6 +2,10 @@
 
 namespace OrderService.Application.Helpers.Commands.DTOs
 {
+    //Not in use:
+    //Consideration on whether it is necessary to have separate Command-type DTOs,
+    //when Activities have effectively replaced Commands. 
+    //It is a question of complexity and validation
     public class CreateOrderDto
     {
         public string Id { get; set; }
