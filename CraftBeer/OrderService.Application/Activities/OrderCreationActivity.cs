@@ -17,13 +17,18 @@ public class OrderCreationActivity : WorkflowActivity<OrderDto, object?>
         var customer = Customer.FromDto(input.CustomerDto);
 
         var orderStatus = (OrderStatus)(int)input.StatusDto;
+
         try
         {
+            //Wrap in UoW
             var order = Order.Create(input.OrderId,
                              orderItems,
                              input.OrderDate,
                              customer,
                              orderStatus);
+
+            //Call infrastructure to add order via repository interface, e.g.:
+            //_createOrderRepository.AddOrder(order);
 
             return Task.FromResult<object?>(null);  // Understreger at null er en bevidst return type
         }

@@ -22,7 +22,7 @@ public class PaymentActivity : WorkflowActivity<PaymentDto, object?>
     {
         _logger.LogInformation($"About to publish payment of: {input.Amount.ToString("C")}");
 
-        var paymentRequestMessage = new PaymentResultEvent { CorrelationId = context.InstanceId, Amount = 100 };
+        var paymentRequestMessage = new PaymentResultEvent { CorrelationId = context.InstanceId, Amount = input.Amount };
 
         await _daprClient.PublishEventAsync(PaymentChannel.Channel,
                                             PaymentChannel.Topics.Payment,

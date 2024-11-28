@@ -2,6 +2,7 @@
 
 namespace OrderService.Application.Helpers
 {
+    //TODO: Implement Unit of Work on activities
     public interface IUnitOfWork
     {
         void Commit();

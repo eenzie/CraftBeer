@@ -21,8 +21,6 @@ public class WorkflowChannelController : ControllerBase
         _logger = logger;
     }
 
-    //TODO: Workflow channel: Order creation result??
-
     [Topic(WorkflowChannel.Channel, WorkflowChannel.Topics.ReservationResult)]
     [HttpPost("reservationresult")]
     public async Task<IActionResult> ReservationResult([FromBody] ReservationResultEvent reservationResult)
@@ -61,7 +59,7 @@ public class WorkflowChannelController : ControllerBase
     public async Task<IActionResult> PaymentResult([FromBody] PaymentResultEvent paymentResult)
     {
         _logger.LogInformation(
-            $"Payment response received: Id: {paymentResult.CorrelationId}, Amount: {paymentResult.Amount}, State: {paymentResult.Status}");
+            $"Payment response received: Id: {paymentResult.CorrelationId}, Amount: {paymentResult.Amount}, Status: {paymentResult.Status}");
 
         try
         {
@@ -95,7 +93,7 @@ public class WorkflowChannelController : ControllerBase
     public async Task<IActionResult> ShippingResult([FromBody] ShippingResultEvent itemsShippedResult)
     {
         _logger.LogInformation(
-            $"Shipping response received: Id: {itemsShippedResult.CorrelationId}, State: {itemsShippedResult.Status}");
+            $"Shipping response received: Id: {itemsShippedResult.CorrelationId}, Status: {itemsShippedResult.Status}");
 
         try
         {
