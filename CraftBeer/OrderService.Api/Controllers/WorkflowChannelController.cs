@@ -59,7 +59,7 @@ public class WorkflowChannelController : ControllerBase
     public async Task<IActionResult> PaymentResult([FromBody] PaymentResultEvent paymentResult)
     {
         _logger.LogInformation(
-            $"Payment response received: Id: {paymentResult.CorrelationId}, Amount: {paymentResult.Amount}, Status: {paymentResult.Status}");
+            $"Payment response received: Id: {paymentResult.CorrelationId}, Amount: {paymentResult.Amount.ToString("C")}, Status: {paymentResult.Status}");
 
         try
         {

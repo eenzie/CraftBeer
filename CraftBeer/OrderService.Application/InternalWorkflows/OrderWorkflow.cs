@@ -187,7 +187,7 @@ public class OrderWorkflow : Workflow<OrderDto, OrderResult>
         await context.CallActivityAsync(
         nameof(NotificationActivity),
         new Notification(
-            $"Completed: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}. Paid ({newOrder.Total.ToString("C")} and shipped",
+            $"Completed: Order {newOrder.OrderId} from {newOrder.CustomerDto.Name}. Paid ({newOrder.Total.ToString("C")}) and shipped",
             newOrder));
 
         return new OrderResult(orderDto.StatusDto, orderDto);
