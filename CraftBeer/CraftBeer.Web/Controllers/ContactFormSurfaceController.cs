@@ -53,7 +53,7 @@ public class ContactFormSurfaceController : SurfaceController
             {
                 IContent comment = cs.Create(model.Subject, CurrentPage.Id, "Comment");
 
-                comment.SetValue("username", model.Name);
+                comment.SetValue("username", model.Alias);
                 comment.SetValue("email", model.Email);
                 comment.SetValue("subject", model.Subject);
                 comment.SetValue("message", model.Message);

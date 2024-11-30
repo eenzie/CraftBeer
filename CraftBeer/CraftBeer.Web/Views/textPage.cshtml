@@ -1,0 +1,15 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "master.cshtml";
+
+	// Gets the content image
+    var image = Model.Value<IPublishedContent>("image");
+	// Checks that image is not null and, if true, retrieved the URL for the image. But if false it returns an empty string (to avoid null ref. except.)
+    string imageUrl = image?.Url() ?? string.Empty;
+}
+
+<div class="p-2 bg-dark text-white rounded">
+	<h4> @Model.Value("text") </h4>
+	<img class="img-fluid" src="@imageUrl" />
+</div>

@@ -5,7 +5,7 @@ namespace CraftBeer.Web.ViewModels;
 public class ContactForm
 {
     [Required(ErrorMessage = "Name is a required field")]
-    public string Name { get; set; } = "";
+    public string Alias { get; set; } = "";
 
     [Required]
     [EmailAddress(ErrorMessage = "not a valid email")]
