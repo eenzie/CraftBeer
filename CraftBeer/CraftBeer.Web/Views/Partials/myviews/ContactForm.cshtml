@@ -1,53 +1,59 @@
 ﻿@model CraftBeer.Web.ViewModels.ContactForm
 @using CraftBeer.Web.Controllers
 
-<h4>Contact Form</h4>
-<hr />
+<div class="d-flex justify-content-center">
+    <h4>Contact Form</h4>
+
+</div>
 <div class="row">
-    <div class="col-md-4">
-        <div class="p-2 bg-success-subtle text-dark rounded p-3">
-            @if (TempData["success"] == null)
-            {
-                // Form context
-                @using (Html.BeginUmbracoForm<ContactFormSurfaceController>(nameof(ContactFormSurfaceController.Submit)))
+    <div class="d-flex justify-content-center">
+        <div class="col-md-4">
+            <div class="p-2 bg-success-subtle text-dark rounded p-3">
+                @if (TempData["success"] == null)
                 {
-                    <div class="form-group">
-                        <label asp-for="Alias" class="control-label"></label>
-                        <input asp-for="Alias" class="form-control" />
-                        <span asp-validation-for="Alias" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Subject" class="control-label"></label>
-                        <input asp-for="Subject" class="form-control" />
-                        <span asp-validation-for="Subject" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Message" class="control-label"></label>
-                        <input asp-for="Message" class="form-control" />
-                        <span asp-validation-for="Message" class="text-danger"></span>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-dark" />
-                    </div>
+                    // Form context
+                    @using (Html.BeginUmbracoForm<ContactFormSurfaceController>(nameof(ContactFormSurfaceController.Submit)))
+                    {
+                        <div class="form-group">
+                            <label asp-for="Alias" class="control-label"></label>
+                            <input asp-for="Alias" class="form-control" />
+                            <span asp-validation-for="Alias" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Subject" class="control-label"></label>
+                            <input asp-for="Subject" class="form-control" />
+                            <span asp-validation-for="Subject" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Message" class="control-label"></label>
+                            <input asp-for="Message" class="form-control" />
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-dark" />
+                        </div>
+                    }
                 }
-            }
-            else
-            {
-                <p>Thank you for contacting us. We'll be in touch soon!</p>
-            }
+                else
+                {
+                    <p>Thank you for contacting us. We'll be in touch soon!</p>
+                }
+            </div>
         </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<div class="d-flex justify-content-center">
+    <div>
+        <br>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>  
 
 @section Scripts {
     @{

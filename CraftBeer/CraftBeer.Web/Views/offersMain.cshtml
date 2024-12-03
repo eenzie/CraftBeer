@@ -1,0 +1,47 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "master.cshtml";
+}
+
+@{
+	var selection = Umbraco.Content(Guid.Parse("53cfa5a7-35c3-4030-91e4-fbbea16d05e8"))
+    .ChildrenOfType("offer")
+    .Where(x => x.IsVisible());
+}
+
+
+<div class="p-2 bg-dark text-white rounded">
+    <h1>@Model.Value("title")</h1>
+	<hr>
+    <h4>@Model.Value("mainContent")</h4>
+    <hr>
+
+	<div class="row">
+			<div class="col-md-4">
+				<ul class="list-group">
+					<h3>Lastest offers</h3>
+					<ul>
+						@foreach (var item in selection)
+						{
+							<!-- Casts dateCreate to DateTime date -->
+							var validFrom = item.Value<DateTime>("validFrom");
+							var validUntil = item.Value<DateTime>("validUntil");
+
+							if (validFrom <= DateTime.Today && validUntil >= DateTime.Today)
+							{
+								<div class="p-3 text-primary-emphasis bg-success-subtle border border-secondary rounded-2">
+									<li class="list-group-item pl-5">
+										<a href="@item.Url()"> @item.Value("title") </a>
+										<!-- Formats date -->
+										<p>Valid until: <i> @validUntil.ToString("dddd dd MMMM yyyy") </i></p>
+									</li>
+								</div>
+							}						
+							<br>
+						}
+					</ul>
+				</ul>
+			</div>
+		</div>
+</div>

@@ -1,0 +1,50 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Services;
+@inject IMemberService MemberService
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "master.cshtml";
+}
+
+@{
+	var isLoggedIn = Context.User?.Identity?.IsAuthenticated ?? false;
+}
+
+@if (isLoggedIn == false)
+{
+    // Redirect to Access Forbidden page
+    Context.Response.Redirect("/access-forbidden");
+}
+else
+{
+	var user = Context.User.Identity;
+	var username = user.GetUserName();
+	var member = MemberService.GetByUsername(username);
+	var uid = (string) member.Key.ToString();
+
+    <div class="p-2 bg-dark text-white rounded">
+        <h1>@Model.Value("title")</h1>
+        <h4>@Model.Value("mainContent")</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="p-3 text-primary-emphasis bg-success-subtle border border-secondary rounded-2">
+                <p>
+                uid: @(uid) <br/>
+                @(member.GetValue("firstName") + " "
+                + member.GetValue("lastName")) <br/>
+                @member.GetValue("address") <br />
+                @(member.GetValue("postCode") + " "
+                + member.GetValue("city")) <br/>
+                Mobile: @member.GetValue("mobile")<br />
+
+                @{
+                    var memberImage = member.GetValue<string>("profilePicture");
+                }
+                <img src="@(memberImage != null ? memberImage : "")" style="width:200px;" />
+                </p>
+            </div>
+        </div>
+    </div>
+}

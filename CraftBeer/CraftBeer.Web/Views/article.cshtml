@@ -1,9 +1,26 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Services
+@using System.Collections.Generic;
+@using System.Linq;
+@using Microsoft.AspNetCore.Mvc;
+@using Umbraco.Cms.Core.PublishedCache;
+@using Umbraco.Cms.Web.Common.Controllers;
+@inject IUserService UserService
+@inject ITagQuery TagQuery;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
 	Layout = "master.cshtml";
+    
     // Casts dateCreated to DateTime
     var date = Model.Value<DateTime>("dateCreated");
+
+    // Gets user name via UserService from user ID (value of "author" property is an int)
+    var userId = Model.Value<int>("author");
+    var user = UserService.GetUserById(userId);
+    var authorName = user?.Name ?? "Unknown"; // Default fallback if user is not found
+
+    // Gets tags
+    var articleTags = Model.Value<IEnumerable<string>>("tags");
 }
 
 <div class="p-2 bg-dark text-white rounded">
@@ -12,5 +29,25 @@
     <h6>@Model.Value("mainContent")</h6>
     <hr>
     <!-- Formats DateTime -->
-    <p><i> @date.ToString("dddd dd MMMM yyyy") </i> by @Model.Value("author")</p>
+    <p><i> @date.ToString("dddd dd MMMM yyyy") </i> by @authorName</p>
+    @if(Model.HasValue("tags"))
+    {
+        <h5> Other content with tags </h5>
+        <ul style="list-style-type: none; padding-left: 0;">
+            @foreach(var tag in articleTags)
+            {
+                var taggedContent = TagQuery.GetContentByTag(tag); 
+                <li><h6>
+                    @tag
+                    @foreach (var content in taggedContent)
+                    {
+                        if(content.Url() != Model.Url())
+                        {
+                        <a href="@content.Url()" class="btn btn-sm btn-subtle text-white border border-white">@content.Value("title")</a>
+                        }
+                    }
+                </h6></li>
+            }
+	    </ul>
+    }
 </div>

@@ -1,0 +1,31 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "master.cshtml";
+
+    // Casts validUntil to DateTime
+    var date = Model.Value<DateTime>("validUntil");
+
+    // Gets validFrom and validUntil properties + today's date
+    var validFrom = Model.Value<DateTime>("validFrom");
+    var validUntil = Model.Value<DateTime>("validUntil");
+    var today = DateTime.Today;
+
+    // Check if the offer (date range) is valid
+    if (today < validFrom || today > validUntil)
+    {
+        // Redirect to Access Forbidden page
+        Context.Response.Redirect("/access-forbidden");
+    }       
+}
+
+<div class="p-2 bg-dark text-white rounded">
+    <h2>@Model.Value("title")</h2>
+	<hr>
+    <h4>@Model.Value("mainContent")</h4>
+    <hr>
+    <p>Enter code at check out:</p>
+    <h2>@Model.Value("code")</h2>
+    <!-- Formats DateTime -->
+    <p> Valid until (and including): <i> @date.ToString("dddd dd MMMM yyyy") </i></p>
+</div>
