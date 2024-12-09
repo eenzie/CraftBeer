@@ -26,7 +26,7 @@ public class WorkflowChannelController : ControllerBase
     public async Task<IActionResult> ReservationResult([FromBody] ReservationResultEvent reservationResult)
     {
         _logger.LogInformation(
-            $"Reservation response received: ID: {reservationResult.CorrelationId}");
+            $"Reservation response received: ID: {reservationResult.CorrelationId}, Status: {reservationResult.Status}");
 
         try
         {
@@ -70,7 +70,7 @@ public class WorkflowChannelController : ControllerBase
                                                       paymentResult);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-            _logger.LogInformation("Payment response send to workflow successfully");
+            _logger.LogInformation("Payment response send to workflow");
 
         }
         catch (Dapr.DaprException daprEx)

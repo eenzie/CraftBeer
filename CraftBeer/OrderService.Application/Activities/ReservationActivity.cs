@@ -29,8 +29,6 @@ public class ReservationActivity : WorkflowActivity<List<OrderItemDto>, object?>
                                     $"Total={item.Total}");
         }
 
-        //Call application reservation logic her
-
         var reservationRequestMessage = new ReservationEvent { CorrelationId = context.InstanceId };
 
         await _daprClient.PublishEventAsync(WarehouseChannel.Channel,

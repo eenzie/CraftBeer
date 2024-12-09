@@ -63,7 +63,7 @@ public class WarehouseController : ControllerBase
     [HttpPost("shipping/do")]
     public async Task<IActionResult> Post([FromBody] ShippingEvent shipItemsEventRequest)
     {
-        _logger.LogInformation($"Payment request received: {shipItemsEventRequest.CorrelationId}");
+        _logger.LogInformation($"Shipping request received: {shipItemsEventRequest.CorrelationId}");
 
         var itemsShippedResponse = new ShippingResultEvent
         {
@@ -75,7 +75,7 @@ public class WarehouseController : ControllerBase
             itemsShippedResponse);
 
         _logger.LogInformation(
-            $"Payment processed: {itemsShippedResponse.CorrelationId}, {itemsShippedResponse.Status}");
+            $"Shipping processed: {itemsShippedResponse.CorrelationId}, {itemsShippedResponse.Status}");
 
         return Ok();
     }
